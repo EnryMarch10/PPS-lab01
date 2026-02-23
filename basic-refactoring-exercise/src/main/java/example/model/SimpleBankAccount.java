@@ -7,12 +7,17 @@ package example.model;
  */
 public class SimpleBankAccount implements BankAccount {
 
+    public static final double LOWEST_BALANCE = 0.0;
+
     private double balance;
     private final AccountHolder holder;
 
     public SimpleBankAccount(final AccountHolder holder, final double balance) {
+        if (holder == null) {
+            throw new IllegalArgumentException("Account holder cannot be null.");
+        }
         this.holder = holder;
-        this.balance = balance;
+        this.balance = Math.max(balance, LOWEST_BALANCE);
     }
 
     @Override
@@ -20,11 +25,23 @@ public class SimpleBankAccount implements BankAccount {
         return this.balance;
     }
 
+    private boolean checkUser(final int id) {
+        return this.holder.id() == id;
+    }
+
+    private boolean checkAmountPositive(final double amount) {
+        return amount > 0.0;
+    }
+
     @Override
     public void deposit(final int userID, final double amount) {
-        if (checkUser(userID)) {
+        if (checkUser(userID) && checkAmountPositive(amount)) {
             this.balance += amount;
         }
+    }
+
+    private boolean isWithdrawAllowed(final double amount) {
+        return checkAmountPositive(amount) && this.balance >= amount;
     }
 
     @Override
@@ -32,13 +49,5 @@ public class SimpleBankAccount implements BankAccount {
         if (checkUser(userID) && isWithdrawAllowed(amount)) {
             this.balance -= amount;
         }
-    }
-
-    private boolean isWithdrawAllowed(final double amount){
-        return this.balance >= amount;
-    }
-
-    private boolean checkUser(final int id) {
-        return this.holder.id() == id;
     }
 }

@@ -83,8 +83,8 @@ class SimpleBankAccountTest {
         assertBankAccountBalanceIsDefaultAmount();
     }
 
-    private void withdrawDefaultAmount(int withdrawId) {
-        bankAccount.withdraw(withdrawId, WITHDRAW_AMOUNT);
+    private void withdrawDefaultAmount(int withdrawID) {
+        bankAccount.withdraw(withdrawID, WITHDRAW_AMOUNT);
     }
 
     @Test
